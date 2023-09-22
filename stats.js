@@ -42,9 +42,9 @@ const formatFileSize = (size) => {
   }
 };
 
-const showStats = () => {
+const showStats = (outdir) => {
   console.log("\nResult\n--------------------------------------------------");
-  for (const file of findFileRecursive("dist", ".js", ".css", ".map")) {
+  for (const file of findFileRecursive(outdir, ".js", ".css", ".map")) {
     const name = file.name.padEnd(20);
     const size = formatFileSize(file.stats.size);
     const color = size.endsWith("MB") ? red : green;

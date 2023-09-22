@@ -3,12 +3,14 @@ const { program } = require("commander");
 const fs = require("node:fs/promises");
 const { showStats } = require("./stats");
 
+const outdir = "docs/js";
+
 async function main(watch, prd, metafile) {
   const nodeEnv = prd ? "production" : "development";
   const options = {
     entryPoints: ["./src/main.tsx"],
     bundle: true,
-    outdir: "./dist",
+    outdir,
     minify: true,
     treeShaking: true,
     sourcemap: false,
@@ -26,14 +28,14 @@ async function main(watch, prd, metafile) {
     await ctx.watch();
     console.log("Watching for changes...");
   } else {
-    await fs.rm("dist", { recursive: true }).catch((error) => {
-      console.warn("dist directory not found.");
+    await fs.rm(outdir, { recursive: true }).catch((error) => {
+      console.warn(`${outdir} not found.`);
     });
     const result = await esbuild.build({ ...options, metafile });
     if (metafile) {
       await fs.writeFile("meta.json", JSON.stringify(result.metafile));
     }
-    showStats();
+    showStats(outdir);
   }
 }
 
