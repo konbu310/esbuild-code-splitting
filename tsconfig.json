@@ -1,6 +1,14 @@
 {
-  "extends": "@tsconfig/strictest/tsconfig.json",
   "compilerOptions": {
-    "jsx": "react"
-  }
+    "strict": true,
+    "target": "es2021",
+    "module": "commonjs",
+    "esModuleInterop": true,
+    "sourceMap": true,
+    "outDir": "dist",
+    "jsx": "react",
+    "skipLibCheck": true,
+    "baseUrl": "./",
+  },
+  "include": ["src/**/*"]
 }

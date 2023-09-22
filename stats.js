@@ -1,5 +1,36 @@
 const { red, green } = require("colorette");
-const { findFileRecursive } = require("./util");
+const fs = require("node:fs");
+const path = require("node:path");
+
+const findFileRecursive = function* (root, ...exts) {
+  const isExtMatch = extMatcher(...exts);
+  const stack = [root];
+  while (stack.length > 0) {
+    const dir = stack.pop();
+    for (const f of fs.readdirSync(dir)) {
+      const file = path.join(dir, f);
+      const stats = fs.statSync(file);
+      if (stats.isDirectory()) {
+        stack.push(file);
+      } else if (stats.isFile()) {
+        if (isExtMatch(file)) {
+          yield { name: f, path: file, stats };
+        }
+      }
+    }
+  }
+};
+
+const extMatcher = (...exts) => {
+  return (f) => {
+    for (const e of exts) {
+      if (f.endsWith(e)) {
+        return true;
+      }
+    }
+    return false;
+  };
+};
 
 const formatFileSize = (size) => {
   if (size < 1024) {

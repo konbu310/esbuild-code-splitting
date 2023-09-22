@@ -3,6 +3,7 @@ import express from "express";
 const app = express();
 
 app.use(express.static("dist"));
+app.use(express.static("public"));
 
 app.get("/", (_, res) => {
   res.send(`<!DOCTYPE html>
@@ -13,7 +14,7 @@ app.get("/", (_, res) => {
   </head>
   <body>
     <div id="root"></div>
-    <script src="bundle.js"></script>
+    <script type="module" src="main.js"></script>
   </body>
 </html>`);
 });
